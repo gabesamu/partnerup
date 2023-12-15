@@ -19,7 +19,7 @@ class Timeblock(Enum):
 
     @staticmethod
     def display_schedule(timeblocks: list["Timeblock"] ) -> str:
-        return ", ".join(str(timeblock) for timeblock in sorted(timeblocks))
+        return ", ".join(str(timeblock) for timeblock in sorted(timeblocks, key=lambda x: x.value))
 
 
 
@@ -92,7 +92,7 @@ class GroupsTable:
                 user_ids TEXT,
                 channel_id INTEGER,
                 thread_id INTEGER,
-                PRIMARY KEY (guild_id, user_id, partner_id))''')
+                PRIMARY KEY (guild_id, user_ids))''')
             self.conn.commit()
 
 

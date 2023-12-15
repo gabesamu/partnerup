@@ -1,3 +1,4 @@
+print("Loading...")
 import json
 import logging
 import os
@@ -13,7 +14,7 @@ from discord.ext import tasks
 from dotenv import load_dotenv
 
 from .db import ScheduleTable, GroupsTable, Timeblock
-from .utils import get_user_name, read_guild_to_channel, parse_args
+from .utils import get_user_name, parse_args
 
 load_dotenv()
 args = parse_args()
@@ -53,9 +54,7 @@ groups = GroupsTable(DB_PATH)
     description="Add timeblocks to find a partner for pair programming. \
 Matches go out at 8am UTC that day.",
 )
-@app_commands.describe(
-    timeblock="Choose WEEK to get a partner for the whole week (pairs announced Monday UTC)."
-)
+
 @app_commands.choices(
     timeblock=[
         app_commands.Choice(name=Timeblock.Monday.name, value=Timeblock.Monday.value),
@@ -157,7 +156,7 @@ async def _schedule(interaction: discord.Interaction):
             f"G:{interaction.guild_id} U:{interaction.user.id} queried schedule {Timeblock.display_schedule(timeblocks)}."
         )
         msg = (
-            f"Your current schedule is `{schedule}`. "
+            f"Your current schedule is `{Timeblock.display_schedule(timeblocks)}`. "
             "You can call `/subscribe` or `/unsubscribe` to modify it."
         )
         await interaction.response.send_message(msg, ephemeral=True)
@@ -378,3 +377,10 @@ async def on_ready():
 
 def run():
     discord_client.run(TOKEN)
+
+
+
+if __name__ == "__main__":
+    print("Starting bot...")
+    run()
+    print("Done!")
